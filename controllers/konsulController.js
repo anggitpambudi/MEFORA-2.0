@@ -6,23 +6,30 @@ exports.create = async (req, res, next) => {
     try {
         const konsul = await konsulModel.findOne({
             where: {
-                pasien_id: payload.pasien_id,
-                dokter_id: payload.dokter_id
+                pasien_id: payload.pasien_bioid,
+                dokter_id: payload.dokter_bioid
             }
         })
-
-        if (konsul) {
-            await konsulModel.update(payload);
-            res.status(302).send.json({
+        if (konsul == null) {
+            await konsulModel.create({
+                pasien_id: payload.pasien_bioid,
+                dokter_id: payload.dokter_bioid
+            });
+            return res.status(201).send({
                 status: 'success',
-                msg: 'Data already exists and updated successfully',
+                msg: 'Created successfully',
                 data: payload
             })
         } else {
-            await konsulModel.create(payload);
-            return res.status(201).send.json({
+            await konsulModel.update(payload, {
+                where: {
+                    pasien_id: payload.pasien_bioid,
+                    dokter_id: payload.dokter_bioid
+                }
+            });
+            res.status(302).send({
                 status: 'success',
-                msg: 'Created successfully',
+                msg: 'Data already exists and updated successfully',
                 data: payload
             })
 

@@ -6,7 +6,7 @@ exports.create = async (req, res, next) => {
     try {
         const disease = await diseaseModel.findOne({
             where: {
-                name: payload.name
+                disease_name: payload.disease_name
             }
         })
 
@@ -48,7 +48,7 @@ exports.update = async (req, res, next) => {
         } else{
             await diseaseModel.update(dataDisease, {
                 where: {
-                    id: req.disease.id
+                    id: req.params.id
                 }
             })
             res.status(200).send({
