@@ -1,0 +1,6 @@
+[
+    { "role": "admin" },
+    { "role": "user" },
+    { "role": "dokter" },
+    { "role": "pasien"}
+]

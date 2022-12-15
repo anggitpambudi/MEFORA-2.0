@@ -6,7 +6,7 @@ exports.create = async (req, res, next) => {
     try {
         const role = await roleModel.findOne({
             where: {
-                name: payload.name
+                role: payload.role
             }
         })
 
@@ -28,38 +28,6 @@ exports.create = async (req, res, next) => {
     }
 
     res.send(payload);
-}
-
-//update role
-exports.update = async (req, res, next) => {
-    try {
-        dataRole = req.body
-        let findRole = await roleModel.findOne({
-            where: {
-                id: req.params.id
-            }
-        })
-
-        if(findRole==null){
-            res.status(404).send({
-                msg: 'Role is not found',
-                status: 404
-            })
-        } else{
-            await roleModel.update(dataRole, {
-                where: {
-                    id: req.role.id
-                }
-            })
-            res.status(200).send({
-                msg: 'Role updated successfully',
-                status: 200,
-                dataRole
-            })
-        }
-    } catch (err) {
-        next(err)
-    }
 }
 
 //delete existing role
@@ -98,10 +66,17 @@ exports.detail = async (req, res, next) => {
                 id: req.params.id
             }
         })
-        res.status(200).json({
-            id: role.id,
-            role: role.role
-        })
+        if(role){
+            res.status(200).json({
+                id: role.id,
+                role: role.role
+            })
+        }else{
+            res.status(404).json({
+                msg: 'Role does not exist'
+            })
+        }
+        
     } catch (err) {
         next(err)
     }

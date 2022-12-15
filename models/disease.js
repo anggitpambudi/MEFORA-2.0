@@ -12,7 +12,9 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       disease.belongsToMany(models.biodata, {
-        through: models.disease_biodata
+        foreignKey: 'disease_id',
+        through: models.disease_biodata,
+        as: 'disease'
       });
     }
   }

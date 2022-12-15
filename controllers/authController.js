@@ -7,21 +7,18 @@ exports.register = async (req, res, next) => {
     const payload = req.body;
     const salt = bcrypt.genSaltSync(10);
     payload.password = bcrypt.hashSync(payload.password, salt);
-
     try {
         const user = await userModel.findOne({
             where: {
                 email: payload.email
             }
         })
-
-        if(user){
-            throw{
+        if (user) {
+            throw {
                 status: 400,
                 msg: "Email already exists"
             }
         }
-
         await userModel.create(payload);
         return res.status(201).json({
             status: 'success',
@@ -31,7 +28,6 @@ exports.register = async (req, res, next) => {
     } catch (err) {
         next(err)
     }
-
     res.send(payload);
 }
 
@@ -43,24 +39,23 @@ exports.login = async (req, res, next) => {
                 email: req.body.email
             }
         })
-
-        if(user){
-            if(bcrypt.compareSync(req.body.password, user.password)){
-                const  token = jwt.sign({
+        if (user) {
+            if (bcrypt.compareSync(req.body.password, user.password)) {
+                const token = jwt.sign({
                     id: user.id,
                     email: user.email
                 }, process.env.JWT_SECRET)
                 res.status(200).json({
                     token,
                 })
-            }else{
+            } else {
                 throw {
                     status: 400,
                     msg: 'Invalid email or password'
                 }
             }
-        }else{
-            throw{
+        } else {
+            throw {
                 status: 400,
                 msg: 'Invalid email or password'
             }

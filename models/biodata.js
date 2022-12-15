@@ -24,10 +24,14 @@ module.exports = (sequelize, DataTypes) => {
         as: 'user'
       });
       biodata.belongsToMany(models.speciality, {
-        through: models.speciality_biodata
+        foreignKey: 'biodata_id',
+        through: models.speciality_biodata,
+        as: 'speciality'
       });
       biodata.belongsToMany(models.disease, {
-        through: models.disease_biodata
+        foreignKey: 'biodata_id',
+        through: models.disease_biodata,
+        as: 'disease'
       });
     }
   }
